@@ -1,0 +1,159 @@
+# .cursorrules
+
+## Genel Kurallar:
+1. Tüm modüller bağımsız ve modüler olarak tasarlanmalıdır.
+2. MVC mimarisi kesinlikle uygulanmalıdır.
+3. Kod okunabilir, genişletilebilir, test edilebilir ve tip güvenli (TypeScript opsiyonu) olmalıdır.
+4. Gerekli tüm güvenlik, performans, monitoring, stil, dokümantasyon ve otomasyon iyileştirmeleri entegre edilmelidir.
+5. Linting, kod formatlama (ESLint, Prettier) ve test altyapısı (Jest, Mocha) kullanılmalıdır.
+6. Geliştirme ve üretim ortamlarında containerization (Docker) ve orkestrasyon (Kubernetes) çözümleri düşünülmelidir.
+7. Ek iyileştirmeler opsiyonel modüller şeklinde uygulanarak, çekirdek yapının sade kalması sağlanacaktır.
+8. **Terminal ve Ortam Komutları:**  
+   - Projenin Mac ortamında çalıştırılması durumunda, terminal komutları ve scriptler hazırlanırken gerekli ön ekler (örn. `sudo` veya ortam ayarları) eksiksiz eklenmelidir.  
+   - Terminal üzerinden yapılacak işlemler için "pre-run" talimatları, macOS için gerekli izinlerin (örn. Homebrew kurulumu, Xcode komut satırı araçlarının kurulması vb.) not edilmesi sağlanacaktır.
+
+## Teknoloji Yığını:
+- **Backend:** Node.js + Express (Opsiyonel: TypeScript ile)
+- **Template Engine & Frontend:**  
+  - **EJS** tabanlı yapı (ilk versiyon için)  
+  - **Next.js:** Alternatif veya ilerleyen aşamalarda tercih edilebilir; SSR, hızlı sayfa yükleme, SEO avantajları ve modern React tabanlı geliştirme imkanı.
+- **Stil:** Tailwind CSS entegrasyonu (responsive ve modern UI)
+- **Veri Tabanı:** MongoDB (Mongoose ile şema tabanlı kullanım)
+- **Önbellekleme:** Redis
+- **Authentication:** JWT, 2FA (Opsiyonel)
+- **API:** REST ve/veya GraphQL (Headless CMS desteği)
+- **Build & Paketleme:** Webpack veya Vite (statik varlık yönetimi için)
+- **Containerization:** Docker, Docker Compose
+- **Orkestrasyon:** Kubernetes
+- **Monitoring & Logging:**  
+  - Monitoring: Prometheus, Grafana  
+  - Loglama: Merkezi loglama (ELK Stack, Fluentd, veya Loki)  
+  - Hata takip sistemleri: Sentry, Rollbar
+- **CI/CD:** GitHub Actions, GitLab CI veya Jenkins
+
+## Sistem Bileşenleri:
+### 1. Çekirdek Sistem:
+- **Temel Yapı:**  
+  - Express tabanlı sunucu, route yönetimi, controller ve model yapısı (MVC).
+- **Güvenlik:**  
+  - CSRF, XSS koruması, rate limiting, dosya yükleme güvenliği.
+  - Gelişmiş kimlik doğrulama (JWT, opsiyonel olarak OAuth 2.0/OpenID Connect).
+- **Performans:**  
+  - Redis cache entegrasyonu.
+  - CDN entegrasyonu (opsiyonel) ve kod bölme (Next.js’de dinamik import, lazy loading).
+- **Kullanıcı Yönetimi:**  
+  - Kayıt, giriş, JWT tabanlı kimlik doğrulama, rol tabanlı erişim kontrolü (Admin, Editör, Üye).
+  - Refresh token mekanizması.
+- **API Desteği:**  
+  - REST ve GraphQL endpoint’leri.
+  - API Gateway entegrasyonu (isteğe bağlı olarak Kong/Tyk gibi çözümler).
+- **Monitoring & Logging:**  
+  - Prometheus ve Grafana ile performans ve hata izleme.
+  - Merkezi loglama (ELK Stack, Fluentd veya Loki) ile log kayıtlarının toplanması ve analizi.
+  - Hata takip sistemleri (Sentry, Rollbar) entegre edilerek, uygulamadaki hataların anlık raporlanması.
+- **Test Altyapısı:**  
+  - Jest/Mocha ile birim ve entegrasyon testleri.
+
+### 2. Tema Sistemi:
+- **Dizin Yapısı:** `/themes/`
+- **Meta Bilgiler:**  
+  - Her tema kendi dizininde bir `theme.json` dosyası içermelidir.
+- **Stil:**  
+  - Temalar, **Tailwind CSS** kullanılarak modern, responsive ve modüler olarak geliştirilecektir.
+- **Yükleme:**  
+  - Dinamik tema seçimi ve yükleme (örneğin, admin panelden aktif tema seçimi).
+
+### 3. Eklenti Sistemi:
+- **Dizin Yapısı:** `/plugins/`
+- **Yapı:**  
+  - Her eklenti, en azından bir `index.js` (veya `index.ts`) dosyasına ve opsiyonel olarak `settings.json` içermelidir.
+- **Kayıt Mekanizması:**  
+  - Eklentiler, otomatik olarak çekirdek sisteme kaydedilmeli ve aktif edilebilir olmalıdır.
+- **Event-Driven Yaklaşım:**  
+  - Plugin’lerin sistem içi olaylara (onInstall, onActivate, onDeactivate) abone olabilmesi için event bus/message queue (RabbitMQ, Kafka veya Redis Pub/Sub) kullanılabilir.
+- **Test Edilebilirlik:**  
+  - Her eklenti için ayrı test dosyaları ve dokümantasyon bulunmalıdır.
+
+### 4. Yönetim Paneli:
+- **İşlevsellik:**  
+  - İçerik yönetimi (blog, sayfa), kullanıcı yönetimi, tema ve eklenti yönetimi, API anahtar yönetimi.
+- **Kullanıcı Dostu Arayüz:**  
+  - İlk sürümde EJS tabanlı, Tailwind CSS ile modernleştirilmiş arayüz.
+  - Alternatif olarak, ilerleyen aşamalarda Next.js ile dinamik, React tabanlı bir yönetim paneli oluşturulabilir.
+- **Mobil Uyumluluk:**  
+  - Responsive tasarım zorunlu.
+- **Erişilebilirlik (Accessibility):**  
+  - WCAG standartlarına uygun tasarım, erişilebilirlik testleri ve klavye navigasyonu.
+
+### 5. Dokümantasyon ve Geliştirici Deneyimi:
+- **Dokümantasyon:**  
+  - Proje dokümantasyonu, API dokümantasyonu (Swagger veya Postman Collections) ve çekirdek sistem, tema ve eklenti geliştirme rehberleri oluşturulmalıdır.
+  - Dokümantasyon, geliştirici wiki, README dosyaları, ve örnek projeler ile desteklenmelidir.
+- **Örnek Projeler & Boilerplate:**  
+  - Yeni geliştiriciler için örnek eklenti, tema ve çekirdek kullanım örnekleri sağlanmalıdır.
+
+## Geliştirme Süreci - Adım Adım:
+1. **Proje Yapısını Oluşturun:**  
+   - Klasör yapısı:  
+     - `server/` (controllers, models, views, routes, middleware, services, plugins, themes, config)  
+     - `public/` (statik dosyalar, Tailwind CSS yapılandırması, assets)
+2. **Temel Sunucu Kurulumu:**  
+   - Express sunucusunu kurun, temel routing ve middleware yapılandırmalarını ekleyin (Opsiyonel: TypeScript desteği).
+   - **Mac Kullanıcıları:** Terminal işlemleri için gerekli komutların (`sudo`, ortam değişkenleri, Homebrew kurulumu, Xcode komut satırı araçları vb.) eklenmesine özen gösterin.
+3. **Veri Tabanı Entegrasyonu:**  
+   - MongoDB bağlantısını yapılandırın (Mongoose ile şema tabanlı yapı oluşturulabilir).
+4. **Kullanıcı Yönetimi:**  
+   - Kayıt, giriş, JWT tabanlı kimlik doğrulama, rol tabanlı erişim kontrolü ve refresh token mekanizmasını ekleyin.
+5. **Güvenlik Katmanları:**  
+   - CSRF, XSS, rate limiting, dosya yükleme güvenliği, gelişmiş kimlik doğrulama yöntemlerini entegre edin.
+6. **Tema Sistemi Altyapısı:**  
+   - `/themes/` dizinini oluşturun, örnek bir tema ekleyin, `theme.json` yapılandırmasını yapın.
+   - **Tailwind CSS Entegrasyonu:**  
+     - Tailwind yapılandırma dosyalarını (tailwind.config.js) ekleyin ve temalarda stil uygulamalarını sağlayın.
+7. **Eklenti Sistemi Altyapısı:**  
+   - `/plugins/` dizinini oluşturun, basit bir örnek eklenti ekleyin.
+   - Event-driven yapı için sistem içi event bus/message queue entegrasyonu düşünün.
+8. **API Katmanı:**  
+   - REST ve/veya GraphQL endpoint’lerini tasarlayın; dış sistemlere veri aktarımı için API Gateway entegrasyonu opsiyonel olarak eklenebilir.
+9. **Performans İyileştirmeleri:**  
+   - Redis ile önbellekleme uygulayın; CDN entegrasyonu ve kod bölme/lazy loading tekniklerini (özellikle Next.js’de) kullanın.
+10. **Çoklu Dil Desteği:**  
+    - İçerik ve admin panel için çoklu dil desteğini ekleyin, çeviri dosyalarını yapılandırın.
+11. **Yönetim Paneli Geliştirmesi:**  
+    - İçerik yönetimi, tema/eklenti yönetimi ve kullanıcı yönetimi özelliklerini entegre edin.
+12. **Stil ve Frontend İyileştirmeleri:**  
+    - **Tailwind CSS** ile modern, responsive ve özelleştirilebilir tasarım sağlayın.
+    - Alternatif olarak, Next.js ile server-side rendering (SSR) ve React tabanlı dinamik UI geliştirme opsiyonunu değerlendirin.
+13. **Containerization ve Orkestrasyon:**  
+    - **Docker:** Proje için Dockerfile oluşturun, containerize edilmiş geliştirme ve üretim ortamları hazırlayın.  
+    - **Docker Compose:** Çoklu servis (backend, MongoDB, Redis, vb.) için yerel geliştirme ortamını yapılandırın.  
+    - **Kubernetes:** Üretim ortamında ölçeklenebilirlik için Kubernetes deployment, service ve ingress konfigürasyonlarını hazırlayın.
+14. **Monitoring ve Logging:**  
+    - Prometheus ve Grafana ile uygulama performansını ve hataları izleyin.  
+    - Merkezi loglama (ELK Stack, Fluentd veya Loki) ile log kayıtlarını toplayın ve analiz edin.  
+    - Hata takip sistemleri (Sentry, Rollbar) ile anlık raporlama ve uyarı mekanizmaları kurun.
+15. **CI/CD ve Otomasyon:**  
+    - GitHub Actions, GitLab CI veya Jenkins kullanarak otomatik test, derleme ve dağıtım süreçlerini entegre edin.
+    - Kod kalitesi için ESLint, Prettier, TypeScript (opsiyonel) ve statik analiz araçlarını kullanın.
+16. **Test ve Hata Ayıklama:**  
+    - Tüm bileşenler için birim ve entegrasyon testleri yazın; sistemin stabil ve güvenli çalıştığından emin olun.
+17. **Dokümantasyon ve Geliştirici Deneyimi:**  
+    - Kapsamlı dokümantasyon hazırlayın; API dokümantasyonu (Swagger veya Postman Collections), çekirdek sistem, tema ve eklenti geliştirme rehberleri oluşturun.
+    - Örnek projeler, boilerplate kodlar ve geliştirici wiki’leri ile yeni geliştiricilerin adaptasyonunu kolaylaştırın.
+18. **Versiyon Kontrol:**  
+    - Git ve GitHub üzerinden düzenli commit’ler ve branch yönetimi ile sürüm kontrolü yapın.
+
+## Ek Notlar:
+- **Modüler Genişletilebilirlik:**  
+  - Ek iyileştirmeler çekirdek sisteme doğrudan entegre edilmek yerine ayrı modüller/servisler olarak geliştirilmeli, böylece çekirdek yapı sade tutulur.
+- **Modern Araçlar ve CI/CD:**  
+  - Otomasyon, statik analiz, containerization ve orchestration süreçleriyle kod kalitesi ve dağıtım süreçleri optimize edilebilir.
+- **Tip Güvenliği:**  
+  - Opsiyonel olarak TypeScript entegrasyonu ile tip güvenliği artırılabilir.
+- **Monitoring ve Loglama:**  
+  - Uygulamanın genel sağlığı, performansı ve hataların anlık takibi için modern izleme araçları entegre edilmelidir.
+- **Dokümantasyon:**  
+  - Her modül ve bileşen için detaylı dokümantasyon, rehberler ve örnek projeler sağlanmalıdır; böylece geliştirici deneyimi artırılır.
+- **Mac Ortamı:**  
+  - Terminal komutları çalıştırılırken, macOS ortamı için gerekli `sudo` komutları, Homebrew kurulumu, Xcode komut satırı araçları ve diğer ortam ayarları komutlara eklenmelidir.  
+  - Bu talimatlar, projenin başlangıcında yer alacak "pre-run" script veya README içeriğinde detaylandırılmalıdır.
