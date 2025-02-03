@@ -1,0 +1,92 @@
+kodlamayı mac bir cihazda yaptığımız için terminal işlemlerinde ona göre kodlamaya özen göster sudo komutunu kullan 
+işlem tamamlanana kadar durma.
+---
+
+### **Proje Geliştirme Aşamaları**
+
+#### **Adım 1: Temel Çekirdek Sistem Kurulumu**
+- **Amaç:** MVC mimarisine dayalı temel Express sunucusu, kullanıcı yönetimi, veri tabanı (MongoDB) bağlantısı ve temel güvenlik önlemleriyle (CSRF, XSS, rate limiting) sağlam bir çekirdek oluşturmak.
+- **İçerik:**
+  - Proje klasör yapısının oluşturulması:
+    - `server/` içinde `controllers/`, `models/`, `views/`, `routes/`, `middleware/`, `services/`, `config/`
+    - `public/` dizini (statik dosyalar, Tailwind CSS yapılandırması, assets)
+  - Express sunucusunun kurulumu ve temel route, middleware eklemeleri.
+  - MongoDB bağlantısının Mongoose ile yapılandırılması.
+  - Kullanıcı yönetimi: Kayıt, giriş, JWT tabanlı kimlik doğrulama, rol tabanlı erişim kontrolü ve refresh token mekanizmasının eklenmesi.
+  - Temel API katmanı: REST endpoint’lerinin (opsiyonel olarak GraphQL) tanımlanması.
+  - Güvenlik katmanlarının eklenmesi (CSRF, XSS koruması, rate limiting).
+
+> **Not:** Bu adım, çekirdek sistemin sağlam temellerini oluşturacak; kodlama kısmı mümkün olduğunca sade tutulmalı ve temel işlevlerin doğru çalışması hedeflenmelidir.
+
+---  
+
+#### **Adım 2: Temalar ve Modüller (Plugin) Sisteminin Eklenmesi**
+- **Amaç:** Çekirdek sisteme modüler yapı ekleyerek, dinamik tema ve eklenti (plugin) sistemi oluşturmak.
+- **İçerik:**
+  - **Tema Sistemi:**
+    - `/themes/` dizin yapısının oluşturulması.
+    - Her tema dizininde bir `theme.json` dosyasının yer alması (tema bilgileri: ad, sürüm, açıklama, vs.).
+    - EJS tabanlı şablonlar ve Tailwind CSS entegrasyonu ile responsive, modern temaların hazırlanması.
+    - Admin panelden dinamik tema seçimi ve yükleme mekanizmasının (basit konfigürasyonlar) eklenmesi.
+  - **Eklenti (Plugin) Sistemi:**
+    - `/plugins/` dizin yapısının oluşturulması.
+    - Her eklenti için en az bir `index.js` (veya TypeScript kullanılıyorsa `index.ts`) dosyası ve isteğe bağlı `settings.json` dosyasının bulunması.
+    - Eklentilerin çekirdek sisteme otomatik kayıt edilmesi ve etkinleştirilmesi için event-driven (örneğin, event bus / message queue) yapı entegrasyonunun düşünülmesi.
+  - Dokümantasyon rehberlerinin oluşturulması (tema ve plugin geliştirme rehberleri, örnek projeler).
+
+> **Not:** Bu adım, modüler yapının çekirdeğe eklenmesiyle sitenin görünümünü ve ek fonksiyonlarını dinamik olarak değiştirebilme yeteneğini kazandıracaktır.
+
+---
+
+#### **Adım 3: Containerization, Orkestrasyon ve CI/CD Süreçlerinin Eklenmesi**
+- **Amaç:** Projenin dağıtım ve ölçeklenebilirlik süreçlerini otomatikleştirmek; Docker ile containerize etmek, Docker Compose ile yerel geliştirme ortamı kurmak ve Kubernetes ile üretim dağıtımını sağlamak.
+- **İçerik:**
+  - **Docker Entegrasyonu:**
+    - Proje için Dockerfile hazırlanması.
+    - Gerekli servisler (backend, MongoDB, Redis vb.) için Docker Compose yapılandırması oluşturulması.
+  - **Kubernetes Orkestrasyonu:**
+    - Üretim ortamında ölçeklenebilirlik için Kubernetes deployment, service ve ingress konfigürasyonlarının hazırlanması.
+  - **CI/CD Süreçleri:**
+    - GitHub Actions, GitLab CI veya Jenkins gibi otomasyon araçlarının entegre edilmesi.
+    - Otomatik test (Jest/Mocha), derleme ve dağıtım süreçlerinin tanımlanması.
+    - Kod kalitesi için ESLint, Prettier ve (opsiyonel) TypeScript statik analiz araçlarının kullanılması.
+
+> **Not:** Bu adım, geliştirme sürecinde kod kalitesini, otomasyonu ve dağıtım süreçlerini optimize ederek projenin sürekli entegrasyonunu sağlar.
+
+---
+
+#### **Adım 4: Gelişmiş Monitoring, Loglama ve Hata Takip Sistemlerinin Eklenmesi**
+- **Amaç:** Uygulamanın performansını, hata ve güvenlik durumlarını izlemek, merkezi loglama ve hata raporlama sistemlerini entegre etmek.
+- **İçerik:**
+  - **Monitoring:**
+    - Prometheus ve Grafana entegrasyonu ile uygulama metriklerinin ve performansın izlenmesi.
+  - **Loglama:**
+    - Merkezi loglama sistemi kurulması (ELK Stack, Fluentd veya Loki gibi çözümler kullanılarak).
+    - Uygulama loglarının toplanması ve analiz edilmesi.
+  - **Hata Takip Sistemleri:**
+    - Sentry, Rollbar gibi hata izleme araçlarının entegrasyonu.
+    - Anlık hata raporlaması ve uyarı mekanizmalarının oluşturulması.
+
+> **Not:** Bu adım, sistemin çalışma durumunun ve hataların anlık takibini sağlayarak, sorunsuz ve stabil çalışmasını garantiler.
+
+---
+
+#### **Adım 5: Yapay Zeka Destekli İyileştirmeler ve Ek Özellikler**
+- **Amaç:** Projede hata düzeltmeleri ve geliştirmeleri için yapay zeka destekli analiz, öneri sistemleri veya otomatik iyileştirme mekanizmaları eklemek (opsiyonel).
+- **İçerik:**
+  - **Yapay Zeka Düzeltmesi:**
+    - Kod analiz araçları veya hata düzeltme asistanları (örneğin, statik analiz ve AI tabanlı kod iyileştirme araçları) entegre edilebilir.
+    - Geliştirici deneyimini iyileştirmek için AI destekli dokümantasyon güncellemeleri ve rehber önerileri.
+  - **Ek Özellikler:**
+    - API Gateway, mikroservis mimarisi gibi gelişmiş API yönetimi özelliklerinin opsiyonel modüller olarak eklenmesi.
+    - Kullanıcı deneyimi (UX) ve erişilebilirlik (Accessibility) iyileştirmeleri için ek geliştirmeler yapılabilir.
+
+> **Not:** Bu adım, projenin temel işlevleri tamamlandıktan sonra, isteğe bağlı ek iyileştirmeler ve optimizasyonlar ile projenin ileri seviye ihtiyaçlarını karşılayacak şekilde genişletilmesini sağlar.
+
+---
+
+### **Özet ve Kullanım**
+- **Adım Adım İlerleme:** Her adım, bir öncekinin üzerine eklenerek ilerler. Böylece temel sistemden modüler yapıya, sonrasında ise dağıtım ve izleme sistemlerine kadar her alan net ve kararlı bir şekilde geliştirilir.
+- **Ayrı Promptlar:** Her adım ayrı ayrı prompt olarak uygulanacak, böylece uzun ve karmaşık tek bir prompt yerine, adım adım ilerleyerek proje yarıda kalmadan tamamlanır.
+- **Genişletilebilirlik:** .cursorrules dosyasında belirtilen tüm özellikler korunur; yeni eklemeler modüler ve opsiyonel olarak eklenir, böylece çekirdek yapı sade kalır.
+
